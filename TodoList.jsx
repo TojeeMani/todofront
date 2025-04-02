@@ -4,6 +4,8 @@ import axios from "axios";
 const TodoList = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editingTaskName, setEditingTaskName] = useState("");
 
   useEffect(() => {
     // Fetch tasks from the backend
@@ -36,6 +38,23 @@ const TodoList = () => {
     });
   };
 
+  const startEditing = (id, name) => {
+    setEditingTaskId(id);
+    setEditingTaskName(name);
+  };
+
+  const saveTaskName = (id) => {
+    axios.put(`http://localhost:5000/api/tasks/${id}`, { name: editingTaskName }).then(() => {
+      setTasks(
+        tasks.map((task) =>
+          task._id === id ? { ...task, name: editingTaskName } : task
+        )
+      );
+      setEditingTaskId(null);
+      setEditingTaskName("");
+    });
+  };
+
   return (
     <div>
       <h1>To-Do List</h1>
@@ -54,7 +73,22 @@ const TodoList = () => {
               checked={task.completed}
               onChange={(e) => updateTask(task._id, e.target.checked)}
             />
-            {task.name}
+            {editingTaskId === task._id ? (
+              <>
+                <input
+                  type="text"
+                  value={editingTaskName}
+                  onChange={(e) => setEditingTaskName(e.target.value)}
+                />
+                <button onClick={() => saveTaskName(task._id)}>Save</button>
+                <button onClick={() => setEditingTaskId(null)}>Cancel</button>
+              </>
+            ) : (
+              <>
+                {task.name}
+                <button onClick={() => startEditing(task._id, task.name)}>Edit</button>
+              </>
+            )}
             <button onClick={() => deleteTask(task._id)}>Delete</button>
           </li>
         ))}
