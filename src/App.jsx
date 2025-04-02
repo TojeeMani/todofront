@@ -43,10 +43,10 @@ function App() {
   // Update a task in the backend
   const updateTask = async (id, updatedTaskName) => {
     try {
-      await axios.put(`${BACKEND_URL}/tasks/${id}`, { task: updatedTaskName });
+      const response = await axios.put(`${BACKEND_URL}/tasks/${id}`, { name: updatedTaskName }); // Ensure 'name' is sent
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task._id === id ? { ...task, task: updatedTaskName } : task
+          task._id === id ? { ...task, name: updatedTaskName } : task
         )
       );
     } catch (error) {

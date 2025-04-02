@@ -11,9 +11,13 @@ function TaskList({ tasks, deleteTask, updateTask }) {
   };
 
   const saveTask = () => {
-    updateTask(editingTaskId, editingTaskName);
-    setEditingTaskId(null);
-    setEditingTaskName("");
+    if (editingTaskName.trim()) {
+      updateTask(editingTaskId, editingTaskName); // Ensure the correct parameters are passed
+      setEditingTaskId(null);
+      setEditingTaskName("");
+    } else {
+      alert("Task name cannot be empty."); // Add validation for empty task names
+    }
   };
 
   return (

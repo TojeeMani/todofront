@@ -45,3 +45,17 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.update-button {
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.update-button:hover {
+  background-color: #218838;
+}
