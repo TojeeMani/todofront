@@ -1,9 +1,30 @@
 import "./TaskList.css";
 import { useState } from "react";
 
-function TaskList({ tasks, deleteTask, updateTask, setTasks }) {
+function TaskList({ tasks, deleteTask, setTasks }) {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingTaskName, setEditingTaskName] = useState("");
+
+  const updateTask = async (taskId, taskName) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task: taskName }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update task: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error in updateTask:", error.message);
+      throw error;
+    }
+  };
 
   const startEditing = (task) => {
     setEditingTaskId(task._id);
@@ -88,3 +109,17 @@ function TaskList({ tasks, deleteTask, updateTask, setTasks }) {
 }
 
 export default TaskList;
+
+app.put('/api/tasks/:id', async (req, res) => {
+  const { id } = req.params;
+  const { task } = req.body;
+
+  // Update the task in the database
+  const updatedTask = await Task.findByIdAndUpdate(id, { task }, { new: true });
+
+  if (!updatedTask) {
+    return res.status(404).json({ error: 'Task not found' });
+  }
+
+  res.json(updatedTask);
+});
