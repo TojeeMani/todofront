@@ -10,17 +10,16 @@ function TaskList({ tasks, deleteTask, updateTask }) {
     setEditingTaskName(task.task);
   };
 
-  const saveTask = () => {
+  const saveTask = async () => {
     if (editingTaskName.trim()) {
-      updateTask(editingTaskId, editingTaskName) // Ensure the correct parameters are passed
-        .then(() => {
-          setEditingTaskId(null);
-          setEditingTaskName("");
-        })
-        .catch((error) => {
-          console.error("Error saving task:", error);
-          alert("Failed to save the task. Please try again.");
-        });
+      try {
+        await updateTask(editingTaskId, editingTaskName); // Ensure the correct parameters are passed
+        setEditingTaskId(null);
+        setEditingTaskName("");
+      } catch (error) {
+        console.error("Error saving task:", error.response || error.message); // Log the error for debugging
+        alert("Failed to save the task. Please try again later.");
+      }
     } else {
       alert("Task name cannot be empty."); // Add validation for empty task names
     }
