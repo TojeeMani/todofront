@@ -13,16 +13,17 @@ function TaskList({ tasks, deleteTask, updateTask, setTasks }) {
   const saveTask = async () => {
     if (editingTaskName.trim()) {
       try {
-        console.log("Saving task:", { id: editingTaskId, name: editingTaskName }); // Debugging
-        await updateTask(editingTaskId, editingTaskName);
+        console.log("Saving task:", { id: editingTaskId, name: editingTaskName });
+        await updateTask(editingTaskId, editingTaskName); // Ensure this function works correctly
         const updatedTasks = tasks.map((task) =>
           task._id === editingTaskId ? { ...task, task: editingTaskName } : task
         );
+        console.log("Updated tasks:", updatedTasks);
         setTasks(updatedTasks); // Update the parent state
         setEditingTaskId(null);
         setEditingTaskName("");
       } catch (error) {
-        console.error("Error saving task:", error.response?.data || error.message); // Log detailed error
+        console.error("Error saving task:", error.response?.data || error.message);
         alert(
           `Failed to save the task. ${
             error.response?.data?.error || "Please try again later."
@@ -30,7 +31,7 @@ function TaskList({ tasks, deleteTask, updateTask, setTasks }) {
         );
       }
     } else {
-      alert("Task name cannot be empty."); // Add validation for empty task names
+      alert("Task name cannot be empty.");
     }
   };
 
@@ -41,21 +42,36 @@ function TaskList({ tasks, deleteTask, updateTask, setTasks }) {
           {editingTaskId === task._id ? (
             <input
               value={editingTaskName}
-              onChange={(e) => setEditingTaskName(e.target.value)}
+              onChange={(e) => {
+                console.log("Editing task name:", e.target.value); // Debugging input changes
+                setEditingTaskName(e.target.value);
+              }}
             />
           ) : (
             <span>{task.task}</span>
           )}
           <div className="task-actions">
-            <button
-              onClick={() => startEditing(task)}
-              className="edit-button"
-            >
-              Edit
-            </button>
-            {editingTaskId === task._id && (
-              <button onClick={saveTask} className="update-button">
-                Save
+            {editingTaskId === task._id ? (
+              <>
+                <button onClick={saveTask} className="update-button">
+                  Save
+                </button>
+                <button
+                  onClick={() => {
+                    setEditingTaskId(null);
+                    setEditingTaskName("");
+                  }}
+                  className="cancel-button"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => startEditing(task)}
+                className="edit-button"
+              >
+                Edit
               </button>
             )}
             <button
