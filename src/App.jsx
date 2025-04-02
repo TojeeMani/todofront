@@ -44,13 +44,15 @@ function App() {
   const updateTask = async (id, updatedTaskName) => {
     try {
       const response = await axios.put(`${BACKEND_URL}/tasks/${id}`, { name: updatedTaskName }); // Ensure 'name' is sent
+      const updatedTask = response.data;
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task._id === id ? { ...task, name: updatedTaskName } : task
+          task._id === id ? updatedTask : task // Use the updated task from the response
         )
       );
     } catch (error) {
       console.error("Error updating task:", error);
+      throw error; // Propagate the error to handle it in the caller
     }
   };
 
