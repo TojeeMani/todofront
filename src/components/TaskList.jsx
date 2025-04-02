@@ -23,10 +23,10 @@ function TaskList({ tasks, deleteTask, updateTask, setTasks }) {
         setEditingTaskId(null);
         setEditingTaskName("");
       } catch (error) {
-        console.error("Error saving task:", error.response?.data || error.message);
+        console.error("Error saving task:", error.message); // Log the error message
         alert(
           `Failed to save the task. ${
-            error.response?.data?.error || "Please try again later."
+            error.response?.data?.error || error.message || "Please try again later."
           }`
         );
       }
