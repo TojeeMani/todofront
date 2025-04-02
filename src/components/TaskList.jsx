@@ -1,7 +1,7 @@
 import "./TaskList.css";
 import { useState } from "react";
 
-function TaskList({ tasks, deleteTask, updateTask }) {
+function TaskList({ tasks, deleteTask, updateTask, setTasks }) {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingTaskName, setEditingTaskName] = useState("");
 
@@ -13,7 +13,12 @@ function TaskList({ tasks, deleteTask, updateTask }) {
   const saveTask = async () => {
     if (editingTaskName.trim()) {
       try {
-        await updateTask(editingTaskId, editingTaskName); // Ensure the correct parameters are passed
+        console.log("Saving task:", { id: editingTaskId, name: editingTaskName }); // Debugging
+        await updateTask(editingTaskId, editingTaskName);
+        const updatedTasks = tasks.map((task) =>
+          task._id === editingTaskId ? { ...task, task: editingTaskName } : task
+        );
+        setTasks(updatedTasks); // Update the parent state
         setEditingTaskId(null);
         setEditingTaskName("");
       } catch (error) {
