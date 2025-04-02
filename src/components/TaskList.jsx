@@ -29,13 +29,15 @@ function TaskList({ tasks, deleteTask, updateTask }) {
             <span>{task.task}</span>
           )}
           <div className="task-actions">
-            {editingTaskId === task._id ? (
+            <button
+              onClick={() => startEditing(task)}
+              className="edit-button"
+            >
+              Edit
+            </button>
+            {editingTaskId === task._id && (
               <button onClick={saveTask} className="update-button">
-                Update
-              </button>
-            ) : (
-              <button onClick={() => startEditing(task)} className="edit-button">
-                Edit
+                Save
               </button>
             )}
             <button

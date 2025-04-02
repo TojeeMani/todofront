@@ -21,13 +21,19 @@
 }
 
 .edit-button {
+  display: inline-block;
+  margin-right: 5px;
   padding: 5px 10px;
   font-size: 14px;
-  background-color: #ffc107;
-  color: #fff;
+  background-color: #007bff;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
 }
 
 .delete-button {
