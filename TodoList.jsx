@@ -52,6 +52,9 @@ const TodoList = () => {
       );
       setEditingTaskId(null);
       setEditingTaskName("");
+    }).catch((error) => {
+      console.error("Error saving task:", error.response?.data || error.message);
+      alert("Failed to save the task. Please try again.");
     });
   };
 
