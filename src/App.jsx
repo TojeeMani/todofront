@@ -51,7 +51,7 @@ function App() {
         )
       );
     } catch (error) {
-      console.error("Error updating task:", error.response || error.message); // Log the error for debugging
+      console.error("Error updating task:", error.response?.data || error.message); // Log detailed error
       throw error; // Propagate the error to handle it in the caller
     }
   };

@@ -17,8 +17,12 @@ function TaskList({ tasks, deleteTask, updateTask }) {
         setEditingTaskId(null);
         setEditingTaskName("");
       } catch (error) {
-        console.error("Error saving task:", error.response || error.message); // Log the error for debugging
-        alert("Failed to save the task. Please try again later.");
+        console.error("Error saving task:", error.response?.data || error.message); // Log detailed error
+        alert(
+          `Failed to save the task. ${
+            error.response?.data?.error || "Please try again later."
+          }`
+        );
       }
     } else {
       alert("Task name cannot be empty."); // Add validation for empty task names
